@@ -1,0 +1,248 @@
+/************************************************************************************************************/
+
+$background-color:	#ffffff;
+$border-color:		#e3e3e3;
+$accent-color:		#69b54f;
+
+$grid-spacing:	25px;
+$transitions:	.25s ease-in-out;
+
+/************************************************************************************************************/
+
+@mixin column-layout( $cols ) {
+
+	@include grid-element( $cols );
+
+	@if $cols == 9 or $cols == 7 or $cols == 5 {
+		@media screen and (max-width: 820px) {
+			@include grid-element(3);
+		}
+		@media screen and (max-width: 640px) {
+			@include grid-element(1);
+		}
+	}
+
+	@elseif $cols == 3 {
+		@media screen and (max-width: 640px) {
+			@include grid-element(1);
+		}
+	}
+
+	@elseif $cols == 8 or $cols == 6 or $cols == 4 {
+		@media screen and (max-width: 820px) {
+			@include grid-element(2);
+		}
+		@media screen and (max-width: 640px) {
+			@include grid-element(1);
+		}
+	}
+
+	@else { // $cols == 2 or $cols == 1
+		@media screen and (max-width: 640px) {
+			@include grid-element(1);
+		}
+	}
+
+}
+
+/************************************************************************************************************/
+
+@mixin grid-layout( $cols ) {
+
+	@include grid-element( $cols );
+
+	@if $cols == 9 or $cols == 7 or $cols == 5 {
+		@media screen and (max-width: 820px) {
+			@include grid-element(5);
+		}
+		@media screen and (max-width: 640px) {
+			@include grid-element(3);
+		}
+		@media screen and (max-width: 375px) {
+			@include grid-element(1);
+		}
+	}
+
+	@elseif $cols == 3 {
+		@media screen and (max-width: 375px) {
+			@include grid-element(1);
+		}
+	}
+
+	@elseif $cols == 8 or $cols == 6 or $cols == 4 {
+		@media screen and (max-width: 820px) {
+			@include grid-element(4);
+		}
+		@media screen and (max-width: 640px) {
+			@include grid-element(2);
+		}
+		@media screen and (max-width: 375px) {
+			@include grid-element(1);
+		}
+	}
+
+	@else { // $cols == 2 or $cols == 1
+		@media screen and (max-width: 375px) {
+			@include grid-element(1);
+		}
+	}
+
+}
+
+/************************************************************************************************************/
+
+@mixin grid-element( $cols ) {
+
+	float: left;
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: $grid-spacing !important;
+	width: calc( ( 99.99%  - ( #{$grid-spacing} * ( #{$cols} - 1) ) ) / #{$cols} ) !important;
+
+	&:not(:nth-child(#{$cols}n)) {
+		margin-right: $grid-spacing !important;
+		clear: none;
+	}
+
+	&:nth-child(#{$cols}n) {
+		margin-right: 0 !important;
+		clear:none;
+	}
+
+	&:nth-child(#{$cols}n+1) {
+		clear: left;
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+		vertical-align: top;
+	}
+
+}
+
+/************************************************************************************************************/
+
+p + .bamboo-columns {
+	margin-top: $grid-spacing;
+}
+
+.bamboo-columns:after {
+	content: "";
+	display: block;
+	clear:both;
+}
+
+@for $cols from 1 through 9 {
+
+	.bamboo-column:nth-last-child(#{$cols}):first-child,
+	.bamboo-column:nth-last-child(#{$cols}):first-child ~ * {
+		@include column-layout( $cols );
+	}
+
+}
+
+.bamboo-columns.bordered {
+	padding-top: $grid-spacing;
+	padding-bottom: $grid-spacing;
+}
+
+.bamboo-columns.bordered .bamboo-column {
+
+	border: 1px solid $border-color;
+	padding: $grid-spacing;
+
+}
+
+.bamboo-features {
+
+	margin-top: $grid-spacing;
+
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+
+}
+
+.bamboo-feature-box {
+
+	@include grid-layout( 5 );
+	width: 100%;
+	height: 14.8vw;
+	overflow: hidden;
+	display: block;
+	position: relative;
+	text-align: center;
+	cursor: pointer;
+
+	.content,
+	.overlay {
+		height: 14.76vw;
+		padding: 2.95vw;
+		margin-top: 0;
+	}
+
+	.content{
+		background: $border-color;
+	}
+
+	.overlay {
+		background: $accent-color;
+		color: $background-color;
+		font-size: 1.53vw;
+		line-height: 1.45em;
+		position: absolute;
+		top: 100%;
+		transition: $transitions;
+		opacity: 0;
+	}
+
+	img {
+		width: 4.75vw;
+		height: 4.75vw;
+	}
+
+	h3 {
+		margin: 0;
+		padding-top: 1.89vw;
+		font-size: 1.53vw;
+		line-height: 1.5em;
+	}
+
+	&:hover, &.clicked {
+		.overlay {
+			top: 0;
+			opacity: 1;
+		}
+	}
+
+	@media screen and (min-width: 480px ), screen and (max-width: 1440px ) {
+
+		height: 150px;
+
+		.content, .overlay {
+			height: 150px;
+			padding: 28px;
+		}
+
+		.overlay {
+			font-size: 13px;
+		}
+
+		img {
+			width: 45px;
+			height: 45px;
+		}
+
+		h3 {
+			padding-top: 30px;
+			font-size: 13px;
+		}
+
+	}
+
+}
+
+/************************************************************************************************************/
